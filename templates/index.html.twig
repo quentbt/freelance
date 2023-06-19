@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Freelance - Acceuil {% endblock %}
+
+{% block body %}
+
+    {% for message in app.flashes('fail') %}
+
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Fail ! </strong> Aucun résultat ne correspond à votre recherche !
+        </div>
+    {% endfor %}
+
+    {% for flash in app.flashes('PaiementAccepted') %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Felicitation!</strong> Votre achat a été effectué .
+        </div>
+    {% endfor %}
+
+
+    <div class="container mt-4">
+
+        <div style="display: flex;">
+
+            <h3 style="margin-right: 10rem"> FILTRES : </h3>
+
+            <form action="{{ path('filter') }}" method="POST">
+                <div>
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Secteur :</button>
+                        <div class="btn-group" role="group">
+                            <select name="secteur" class="btn btn-primary dropdown-toggle" id="">
+
+                                <option value="" disabled selected></option>
+                                {% for secteur in secteurs %}
+                                    <option value="{{ secteur }}"> {{ secteur }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="btn-group" style="margin-left: 2rem" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Prix :</button>
+                        <div class="btn-group" role="group">
+                                <select name="prix" class="btn btn-primary dropdown-toggle">
+                                    <option value=""disabled selected></option>
+                                    <option value="0-50"> 0-50 €</option>
+                                    <option value="50-100"> 50-100 €</option>
+                                    <option value="100-150"> 100-150 €</option>
+                                    <option value="150-200"> 150-200 €</option>
+                                    <option value="200-999999999"> 200+ €</option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="btn-group" style="margin-left: 2rem" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Date min :</button>
+                        <div class="btn-group" role="group">
+                            <select name="date" class="btn btn-primary dropdown-toggle">
+                                <option value=""disabled selected></option>
+                                <option value="1"> 1 jour </option>
+                                <option value="2"> 1 semaine</option>
+                                <option value="3"> 1 mois</option>
+                                <option value="4"> 1an </option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" value="{{ csrf_token('filter') }}" name="filter">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="right: 0;">Search</button>
+                </div>
+            </form>
+            <form action="{{ path('app_liste_non_acheter') }}" method="post">
+
+                <div class="btn-group" style="margin-left: 2rem" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" disabled class="btn btn-primary">Acheter ?</button>
+                    <div class="btn-group" role="group">
+                        <select name="date" class="btn btn-primary dropdown-toggle">
+                            <option value=""disabled selected></option>
+                            <option value="1"> Oui </option>
+                            <option value="2"> Non </option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" value="{{ csrf_token('filter') }}" name="Acheter">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="right: 0;">Search</button>
+            </form>
+        </div>
+
+        <div class="row mt-4">
+            {% for service in services %}
+                <div class="col">
+                    <div class="card mb-3" style="min-width: 20rem; border-radius: 1rem">
+                        <h3 class="card-header"><a href="{{ path('service.info',{id : service.id}) }}">{{ service.nom }}</a></h3>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ service.titre }}</h5>
+                            <h6 class="card-subtitle text-muted">{{ service.prix }} €</h6>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem; text-anchor:middle; border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem ">
+                            <rect width="100%" height="100%" fill="#868e96"></rect>
+                            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                        </svg>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="navigation">
+                {{ knp_pagination_render(services) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

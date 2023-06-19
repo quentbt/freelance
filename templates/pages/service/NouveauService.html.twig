@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+    {{ form_start(form) }}
+
+        <div class="row">
+            <div class="col-4">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.titre) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.prix) }}
+            </div>
+            <div class="col-4">
+                {{ form_row(form.secteur) }}
+            </div>
+        </div>
+        <div class="row">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="row">
+            {{ form_row(form.imageFile) }}
+        </div>
+        <div class="row mt-4">
+            {{ form_row(form.submit) }}
+        </div>
+
+    {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

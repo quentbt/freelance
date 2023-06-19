@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+
+            {% for message in app.flashes('deleted') %}
+
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>C'est bon !</strong> Votre service à bien été supprimé.
+                </div>
+
+            {% endfor %}
+
+            {% for message in app.flashes('created') %}
+
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>C'est bon !</strong> {{message}}
+                </div>
+
+            {% endfor %}
+
+            {% for message in app.flashes('modified') %}
+
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>C'est bon !</strong> {{ message }}
+                </div>
+
+            {% endfor %}
+
+        <div class="row">
+
+            <h1>SERVICES PROPOSÉS</h1>
+
+            <div class="col">
+
+                {% for service in services %}
+                    <div class="card mb-3 mt-5" style="max-width: 40rem">
+                        <h3 class="card-header">{{ service.nom|upper() }}</h3>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ service.user.name }}</h5>
+                            <br>
+                            <h6 class="card-subtitle text-muted">{{ service.description }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <hr>
+                            <p class="card-text">{{ service.prix }} €</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ service.createdAt|date('d/m/y') }}
+                        </div>
+                        <div class="row" style="display: flex; justify-content: space-evenly;">
+
+                            <div class="col">
+                                <a class="btn btn-info" style="width: 100%"
+                                href="{{ path('service.info',{id: service.id}) }}">INFO</a>
+                            </div>
+
+                            {% if app.user %}
+                                {% if( app.user.id  == service.user.id) %}
+
+                                    <div class="col">
+                                        <a class="btn btn-warning" style="width: 100%"
+                                           href="{{ path('service.edit',{id: service.id}) }}">MODIFIER SERVICE</a>
+                                    </div>
+
+                                {% endif %}
+                            {% endif %}
+
+                            {% if app.user %}
+                                {% if( app.user.id  == service.user.id) %}
+
+                                    <div class="col">
+                                        <form method="post" action="{{ path('service.delete', {id: service.id}) }}"
+                                              style="display: inline-block"
+                                              onsubmit="return confirm('Etes vous vraiment sur ?')">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('delete' ~ service.id) }}">
+                                            <button class="btn btn-danger">SUPPRIMER SERVICE</button>
+                                        </form>
+                                    </div>
+
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-4">
+                {% if app.user %}
+                    {% if (app.user.id == user.id) %}
+
+                        <div class="d-grid gap-2" style="text-align: end;">
+                            <a href="{{ path('service.nouveau') }}" class="btn btn-lg btn-primary"
+                               style="border-radius: 1rem">Ajouter un service</a>
+                        </div>
+
+                    {% endif %}
+                    {% if (app.user.id != user.id) %}
+
+                        <div class="d-grid gap-2" style="text-align: end;">
+                            <a href="{{ path('nouveau_message',{id : user.id}) }}"
+                               class="btn btn-lg btn-primary"
+                               style="border-radius: 1rem">Envoyer un message</a>
+                        </div>
+
+                    {% endif %}
+                {% endif %}
+
+                <div class="card mt-4">
+                    <h3 class="card-header">{{ user.name }}</h3>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.email }}</h5>
+                        <h6 class="card-subtitle text-muted"></h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ user.createdAt|date('d/m/Y') }}</p>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-evenly">
+
+                    {% if app.user %}
+
+                        <a class="btn btn-dark mb-5" href="{{ path('app_historique_achat',{id: user.id}) }}">Historique Achat</a>
+
+                    {% endif %}
+
+                    {% if app.user %}
+                        {% if app.user.id == user.id %}
+
+                            <a class="btn btn-dark mb-5"
+                               href="{{ path('user.modifier.profil',{id: user.id}) }}">Modifier
+                                profil</a>
+
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <h1 class="mt-5">COMMENTAIRE</h1>
+
+        {% for commentaire in user.commentaires %}
+
+            <div class="card text-white bg-dark mb-3 mt-4"  style="min-width: 20rem;" >
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <div>{{ commentaire.service.nom }}</div>
+                        </div>
+                        <div class="col-1" style="text-align: center">
+                            <div>{{ commentaire.note }}/5</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ commentaire.user.name }}</h4>
+                    <p class="card-text">{{ commentaire.commentaire }}</p>
+                </div>
+                {% if app.user.id == commentaire.user.id %}
+
+                    <a href="{{ path('commentaire_user_delete',{id: commentaire.id}) }}"
+                       class="btn btn-outline-danger">Supprimer commentaire</a>
+
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Filtre {% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <div style="display: flex;">
+
+            <h3 style="margin-right: 10rem"> FILTRES : </h3>
+
+            <form action="{{ path('filter') }}" method="POST">
+                <div>
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Secteur :</button>
+                        <div class="btn-group" role="group">
+                            <select name="secteur" class="btn btn-primary dropdown-toggle" id="">
+                                <option value="" disabled selected></option>
+                                {% for secteur in secteurs %}
+                                    <option value="{{ secteur }}"> {{ secteur }} </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="btn-group" style="margin-left: 2rem" role="group"
+                         aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Prix :</button>
+                        <div class="btn-group" role="group">
+                            <select name="prix" class="btn btn-primary dropdown-toggle">
+                                <option value="" disabled selected></option>
+                                <option value="0-50"> 0-50 €</option>
+                                <option value="50-100"> 50-100 €</option>
+                                <option value="100-150"> 100-150 €</option>
+                                <option value="150-200"> 150-200 €</option>
+                                <option value="200-999999"> 200+ €</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-group" style="margin-left: 2rem" role="group"
+                         aria-label="Button group with nested dropdown">
+                        <button type="button" disabled class="btn btn-primary">Date min :</button>
+                        <div class="btn-group" role="group">
+                            <select name="date" class="btn btn-primary dropdown-toggle">
+                                <option value="" disabled selected></option>
+                                <option value="1"> 1 jour</option>
+                                <option value="2"> 1 semaine</option>
+                                <option value="3"> 1 mois</option>
+                                <option value="4"> 1an</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" value="{{ csrf_token('filter') }}" name="filter">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="right: 0;">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="row mt-4">
+            {% for service in services %}
+                {% if service != "" %}
+                    <div class="col">
+                        <div class="card mb-3" style="min-width: 35rem; max-width: 30rem; border-radius: 1rem;">
+                            <h3 class="card-header"><a
+                                        href="{{ path('service.info',{id: service.id}) }}">{{ service.nom }}</a></h3>
+                            <div class="card-body">
+                                <p class="card-text">{{ service.secteur }}</p>
+                                <h5 class="card-title">{{ service.titre }}</h5>
+                                <h6 class="card-subtitle text-muted">{{ service.prix }} €</h6>
+                            </div>
+                            <img style="max-height: 20rem; max-width: 50rem" src="{{ vich_uploader_asset(service, "imageFile") }}" alt="">
+                        </div>
+                    </div>
+                {% else %}
+
+                    <h2 style="margin-top: 5rem">Aucun résultat ne correspond à votre recherche. Veuillez changer les filtres</h2>
+                {% endif %}
+            {% endfor %}
+{#            <div class="navigation">#}
+{#                {{ knp_pagination_render(services) }}#}
+{#            </div>#}
+        </div>
+    </div>
+
+{% endblock %}

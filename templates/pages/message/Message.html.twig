@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        {% for messages in message %}
+
+            <div style="flex-direction: column;">
+
+            {% if app.user.id == messages.userenvoyeur.id %}
+
+                <div style="justify-content: right">
+                    <div class="card text-white bg-secondary mt-4" >
+                        <div class="card-header" style="text-align: end">{{ messages.userenvoyeur.name }}</div>
+                        <div class="card-body">
+                            <p class="card-text">{{ messages.message }}</p>
+                        </div>
+                    </div>
+                    {% if app.user.id == messages.userenvoyeur.id %}
+
+                        <a href="{{ path('delete.message', {id: messages.id}) }}" class="btn btn-outline-danger">Supprimer message</a>
+
+                    {% endif %}
+                </div>
+
+                {% else %}
+
+                <div class="card text-white bg-secondary mt-4">
+                    <div class="card-header">{{ messages.userenvoyeur.name }}</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ messages.message }}</p>
+                    </div>
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+        </div>
+
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

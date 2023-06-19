@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ServiceController!{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <h1> Liste de tous les services </h1>
+
+        <table class="table table-hover mt-4">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Date Creation</th>
+                <th scope="col">Info</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for services in service %}
+                <tr class="table-primary">
+                    <td>{{ services.nom }}</td>
+                    <td>{{ services.titre }}</td>
+                    <td>{{ services.prix }}</td>
+                    <td>{{ services.createdAt|date('d/m/Y') }}</td>
+                    <td><a class="btn btn-info" href="{{ path('service.info',{id: services.id}) }}">Info</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation">
+            {{ knp_pagination_render(service) }}
+        </div>
+    </div>
+
+
+{% endblock %}

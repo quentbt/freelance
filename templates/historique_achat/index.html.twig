@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique Achat{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        {% for achat in achats %}
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header"><a href="{{ path('service.info',{id: achat.idservice.id}) }}">{{ achat.idservice.nom }}</a></div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ achat.idservice.user.name }} </h4>
+                    <p class="card-text">Prix : {{ achat.idservice.prix }}</p>
+                    <hr>
+                    <p class="card-text">{{ achat.idservice.description}}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

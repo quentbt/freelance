@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <h1> Liste des services trouvés pour "{{ noms }}" </h1>
+
+        <table class="table table-hover mt-4">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Info</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for service in nouveauService %}
+                <tr class="table-primary">
+                    <td>{{ service.nom }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="btn btn-info" href="{{ path('service.info',{id: service.id }) }}">Info</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+{#        </table><div class="navigation">#}
+{#            {{ knp_pagination_render(nomTrouve) }}#}
+{#        </div>#}
+    </div>
+{% endblock %}

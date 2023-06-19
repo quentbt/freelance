@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Messagerie {% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <h1>VOS CONVERSATIONS</h1>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Destinataire</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for messageries in messagerie %}
+                <tr>
+                    <td>{{ messageries.userreceveur.name }}</td>
+                    <td><a class="btn btn-info" href="{{ path('conversation',{id: messageries.id}) }}"> → Message ←</a></td>
+                    <td><a class="btn btn-danger" href="{{ path('delete.messagerie',{id: messageries.id}) }}">Supprimer messagerie</a></td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+
+    </div>
+
+{% endblock %}

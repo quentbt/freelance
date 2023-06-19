@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+    {% for flash in app.flashes('carteExpire') %}
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
+        </div>
+    {% endfor %}
+    {% for flash in app.flashes('cardRefused') %}
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
+        </div>
+    {% endfor %}
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+    </div>
+{% endblock %}

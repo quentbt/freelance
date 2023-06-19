@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        {% if verifUser %}
+
+        <h1> Liste des utilisateurs trouvés pour "{{ noms }}" </h1>
+
+        <table class="table table-hover mt-4">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Info</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in userFound %}
+                <tr class="table-primary">
+                    <td>{{ user.name }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="btn btn-info" href="{{ path('user.info',{id: user.id}) }}">Info</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% endif %}
+
+
+        {% if verifService %}
+        <h1> Services trouvés pour "{{ noms }}"</h1>
+
+        <table class="table table-hover mt-4">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Info</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for service in serviceFound %}
+                <tr class="table-primary">
+                    <td>{{ service.nom }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="btn btn-info" href="{{ path('service.info',{id: service.id }) }}">Info</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3">
+                    <div class="card-header">
+
+                        <div class="row">
+                            <div class="col">
+                                <h3>{{ service.nom }}</h3>
+                            </div>
+                            <div class="col-3" style="text-align: center">
+                                {# ecrire la moyenne générale des notes  #}
+
+                                {% set moyenne = 0 %}
+                                {% set i = 0 %}
+                                    {% for commentaires in commentaire %}
+
+                                        {% set moyenne = moyenne + commentaires.note  %}
+                                        {% set i = i + 1 %}
+
+                                    {% endfor %}
+
+                                {% if i < 1 %}
+                                    {% set moyenne = moyenne %}
+
+                                {% else %}
+                                    {% set moyenne  = moyenne/i %}
+
+                                {% endif %}
+
+                                {# Fin ecriture moyenne général #}
+
+                                {% if moyenne == 0 or moyenne == 1 or moyenne == 2 or moyenne == 3 or moyenne == 4 or moyenne == 5%}
+                                    <h3>{{ moyenne }}/ 5</h3>
+
+                                {% else %}
+                                    <h3>{{ moyenne|number_format(1,'.',',') }}/5</h3>
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.titre }}</h5>
+                        <h6 class="card-subtitle text-muted"><a href="{{ path('user.info',{id: service.user.id}) }}">{{ service.user.name }}</a></h6>
+                    </div>
+                    <img src="{{ vich_uploader_asset(service,'imageFile') }}" alt="" style="max-height: 200cap; max-width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">{{ service.description }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ service.prix }} €</li>
+                    </ul>
+                    <div class="card-footer text-muted">
+                        {{ service.createdAt|date("d/m/Y") }}
+                    </div>
+                </div>
+                </div>
+            <div class="col-4 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ service.nom }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ service.prix }} €</h6>
+                        <p class="card-text">{{ service.user.email }}</p>
+                        <div class="d-grid gap-2">
+                            <a class="btn btn-lg btn-primary" href="{{ path('app_paiement',{id: service.id}) }}" type="button">Passer commande</a>
+                        </div>
+                    </div>
+                </div>
+                {% if app.user %}
+                    {% if app.user.id == service.user.id %}
+                        <div class="d-grid gap-2 mt-2">
+                            <a href="{{ path('service.edit',{id: service.id}) }}" class="btn btn-warning">Modifier Service</a>
+                        </div>
+                        <div class="d-grid gap-2 mt-2">
+                            <form method="post" action="{{ path('service.delete', {id: service.id}) }}"
+                                  style="display: inline-block"
+                                  onsubmit="return confirm('Etes vous vraiment sur ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token"
+                                       value="{{ csrf_token('delete' ~ service.id) }}">
+                                <button class="btn btn-danger">SUPPRIMER SERVICE</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <hr style="margin-top: 5rem">
+        <h1> COMMENTAIRES </h1>
+
+        {% for flash in app.flashes('fail') %}
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
+            </div>
+
+        {% endfor %}
+
+        {% if app.user %}
+            <div>
+                {{ form_start(form) }}
+
+                <div class="row" style="max-width: 46rem">
+                    <div class="col">{{ form_row(form.commentaire) }}</div>
+                    <div class="col" style="max-width: 5rem">{{ form_row(form.note) }}</div>
+                </div>
+                <div style="margin-top: 1rem">
+                    {{ form_row(form.submit) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+
+        <hr>
+
+        {% for commentaires in commentaire %}
+            <div class="col mt-4">
+                <div class="card text-white bg-secondary mb-3 mt-4" style="max-width: 47rem;">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <div>{{ commentaires.user.name }}</div>{#  #}
+                            </div>
+                            <div class="col-2" style="text-align: end">
+                                <div >{{ commentaires.note }}/5</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text ">{{ commentaires.commentaire }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

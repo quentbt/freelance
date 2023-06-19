@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <h1> Liste de tous les utilisateurs </h1>
+
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">rôles</th>
+                    <th scope="col">Date Creation</th>
+                    <th scope="col">Info</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr class="table-primary">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles|join()}}</td>
+                    <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                    <td><a class="btn btn-info" href="{{ path('user.info',{id: user.id}) }}">Info</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table><div class="navigation">
+            {{ knp_pagination_render(users) }}
+        </div>
+    </div>
+{% endblock %}
